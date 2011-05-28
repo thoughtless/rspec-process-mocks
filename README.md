@@ -10,15 +10,17 @@ for method stubs, fakes, and message expectations within child processes.
 
 ## Documentation
 
-## Setup ##
+## Setup
 
 Gemfile
-  gem 'rspec-process-mocks', :git => 'git://github.com/thoughtless/rspec-process-mocks.git'
+
+    gem 'rspec-process-mocks', :git => 'git://github.com/thoughtless/rspec-process-mocks.git'
 
 `bundle install`
 
 spec/spec_helper.rb
-  require 'rspec/process_mocks' # This line must be after 'config.mock_with :rspec'
+
+    require 'rspec/process_mocks' # This line must be after 'config.mock_with :rspec'
 
 ## Message Expectations
 
