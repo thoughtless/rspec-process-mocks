@@ -10,6 +10,16 @@ for method stubs, fakes, and message expectations within child processes.
 
 ## Documentation
 
+## Setup ##
+
+Gemfile
+  gem 'rspec-process-mocks', :git => 'git://github.com/thoughtless/rspec-process-mocks.git'
+
+`bundle install`
+
+spec/spec_helper.rb
+  require 'rspec/process_mocks' # This line must be after 'config.mock_with :rspec'
+
 ## Message Expectations
 
     describe "some action" do
@@ -19,7 +29,15 @@ for method stubs, fakes, and message expectations within child processes.
           doer = Doer.new(logger)
           logger.should_receive_in_child_process(:log)
           doer.do_something_with(:bad_data)
+          sleep 0.1 # Leave time for the child process to run.
         end
+      end
+    end
+
+    class Doer
+      attr_accessor :logger
+      def do_something_with(data)
+        Process.fork { logger.log(data) }
       end
     end
 
