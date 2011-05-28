@@ -1,3 +1,8 @@
+WARNING: This is just a big hack right now. If you are interested in using this
+project but I haven't removed this warning yet, please bug me to lessen the
+hackiness and make it more usable.
+
+
 # RSpec Process Mocks
 
 rspec-process-mocks is an addon to rspec-mocks that provides support
