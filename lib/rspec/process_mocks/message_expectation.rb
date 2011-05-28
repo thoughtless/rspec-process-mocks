@@ -8,6 +8,18 @@ module RSpec
         @tempfile = Tempfile.new("should-receive-#{@expected_from.object_id}-#{@sym}")
       end
       def verify_messages_received
+        # Maybe we should add a sleep loop here if @tempfile is empty. This may
+        # prevent a user of this library from having to add a sleep in the spec.
+        # Maybe this:
+        #     @tempfile.rewind
+        #     lines = @tempfile.readlines
+        #     timeout = Configure.verify_timeout
+        #     while lines.empty? && timeout > 0
+        #       sleep 0.1
+        #       timeout -= 0.1
+        #       @tempfile.rewind
+        #       lines = @tempfile.readlines
+        #     end
 
         @tempfile.rewind
         lines = @tempfile.readlines
