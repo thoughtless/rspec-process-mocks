@@ -6,6 +6,7 @@ Feature: expect a message
   Scenario: expect a message
     Given a file named "spec/account_spec.rb" with:
       """
+      RSpec.configuration.mock_framework = :rspec
       $: << File.expand_path(File.join(File.dirname(__FILE__), '..', '..', '..', 'lib'))
       require 'rspec/process_mocks'
       require "account"
@@ -21,6 +22,8 @@ Feature: expect a message
             logger.should_receive_in_child_process(:account_closed)
 
             account.close
+
+            sleep 0.1
           end
         end
       end
@@ -38,10 +41,51 @@ Feature: expect a message
     When I run `rspec spec/account_spec.rb`
     Then the output should contain "1 example, 0 failures"
 
+  Scenario: expect a message, but it isn't called
+    Given a file named "spec/account_spec.rb" with:
+      """
+      RSpec.configuration.mock_framework = :rspec
+      $: << File.expand_path(File.join(File.dirname(__FILE__), '..', '..', '..', 'lib'))
+      require 'rspec/process_mocks'
+      require "account"
+
+      describe Account do
+        context "when closed" do
+          it "logs an account closed message in a child process" do
+
+            logger = double("logger")
+            account = Account.new
+            account.logger = logger
+
+            logger.should_receive_in_child_process(:account_closed)
+
+            account.close
+
+            sleep 0.1
+          end
+        end
+      end
+      """
+    And a file named "lib/account.rb" with:
+      """
+      class Account
+        attr_accessor :logger
+
+        def close
+          Process.fork { logger.object_id }
+        end
+      end
+      """
+    When I run `rspec spec/account_spec.rb`
+    Then the output should contain "1 example, 1 failure"
+    And the output should contain "expected: 1 time"
+    And the output should contain "received: 0 times"
+
   @wip
   Scenario: expect a message with an argument
     Given a file named "spec/account_spec.rb" with:
       """
+      RSpec.configuration.mock_framework = :rspec
       $: << File.expand_path(File.join(File.dirname(__FILE__), '..', '..', '..', 'lib'))
       require 'rspec/process_mocks'
       require "account"
@@ -56,6 +100,12 @@ Feature: expect a message
             logger.should_receive_in_child_process(:account_closed).with(account)
 
             account.close
+
+            puts 'start sleep'
+            sleep 1
+            puts 'end sleep'
+
+            account.logger
           end
         end
       end
@@ -77,6 +127,7 @@ Feature: expect a message
   Scenario: provide a return value
     Given a file named "message_expectation_spec.rb" with:
       """
+      RSpec.configuration.mock_framework = :rspec
       $: << File.expand_path(File.join(File.dirname(__FILE__), '..', '..', '..', 'lib'))
       require 'rspec/process_mocks'
       describe "a message expectation" do
