@@ -1,5 +1,3 @@
-require 'tempfile'
-
 module RSpec
   module ProcessMocks
     module Methods

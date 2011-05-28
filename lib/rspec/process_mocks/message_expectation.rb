@@ -1,3 +1,5 @@
+require 'tempfile'
+
 module RSpec
   module ProcessMocks
     class ChildProcessMessageExpectation < RSpec::Mocks::MessageExpectation
