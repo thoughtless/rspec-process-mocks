@@ -1,6 +1,8 @@
 module RSpec
   module ProcessMocks
     module MethodDouble
+      # This has no checking for existing expectations on this object (like RSpec
+      # does). It will probably only work if you set one expectation per object.
       def add_child_process_expectation(error_generator, expectation_ordering, expected_from, opts, &block)
         configure_method
 #        expectation = if existing_stub = stubs.first

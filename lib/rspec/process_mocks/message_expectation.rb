@@ -35,6 +35,8 @@ module RSpec
         Kernel::raise error
       end
 
+      # This is a hack to get it to work. But it means we can only ever expect
+      # exactly 1 message.
       def matches_exact_count?
         lines.size == 1
       end
@@ -50,6 +52,12 @@ module RSpec
 #        yield block, *args if defined?(block)
       end
 
+      # This is a hack to get it to work. But it means we don't get info about
+      # "similar" methods in the failure output. Similar messages are those with
+      # a matching method name, but not matching arguments.
+      # Note: this is only a rough definition of "similar" methods. "Similar"
+      # methods are not part of RSpec's external API, so their definition is not
+      # strictly documented.
       def similar_messages
         []
       end
