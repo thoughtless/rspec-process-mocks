@@ -18,7 +18,7 @@ gem "rcov", "0.9.9", :platforms => :mri
 gem "relish", "0.2.0"
 gem "guard-rspec", "0.1.9"
 gem "growl", "1.0.3"
-gem "nokogiri", "1.4.4"
+gem "nokogiri"
 
 platforms :mri_18 do
   gem 'ruby-debug'
